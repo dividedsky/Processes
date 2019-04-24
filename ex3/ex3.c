@@ -10,6 +10,16 @@
 int main(void)
 {
     // Your code here
+  int child = fork();
+
+  if (child < 0) {
+    printf("You really broke things.\n");
+  } else if ( child == 0 ) {
+    printf("Hello\n");
+  } else {
+    wait(&child);
+    printf("Goodbye\n");
+  }
 
     return 0;
 }
