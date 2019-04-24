@@ -11,6 +11,16 @@
 int main(void)
 {
     // Your code here    
+  int child = fork();
+  char *args[] = {"/bin/ls", "ls"};
+  if (child == 0) {
+    execl(args[0], *args, NULL);
+    printf("This line is nor run when calling exec\n");
+  } else {
+    printf("parent function\n");
+  }
+  /* char *args[] = {"/bin/ls", NULL}; */
+  /* execvp(args[0], args); */
 
     return 0;
 }
