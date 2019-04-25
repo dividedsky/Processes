@@ -22,22 +22,20 @@ and `clock_gettime()` should work just fine.
 int main()
 {
     // Your code here
-  char buffer[8];
-  int p[2];
-  struct timespec start, end;
+  int iterations = 1000000;
 
-  uint64_t total = 0;
-  for (int i = 0; i < 100; i++) {
+  long long total = 0;
+  for (int i = 0; i < iterations; i++) {
+    struct timespec start, end;
     clock_gettime(CLOCK_MONOTONIC, &start);
-    write(p[1], NULL, 8);
-    int end_time = clock_gettime(CLOCK_MONOTONIC, &end);
-    /* printf("null is %d\n", sizeof(NULL)); */
-    long diff = end.tv_nsec - start.tv_nsec;
-    printf("%d nanoseconds elapsed\n", diff);
+    write(STDOUT_FILENO, "", 1);
+    clock_gettime(CLOCK_MONOTONIC, &end);
+    long long diff = (BILLION * (end.tv_sec - start.tv_sec) + end.tv_nsec - start.tv_nsec);
+    printf("%lu nanoseconds elapsed\n", diff);
     total += diff;
   }
-  printf("total is %d\n");
-  printf("average is %d\n", total / 100);
+  printf("total is %lu\n");
+  printf("average is %d\n", total / iterations);
     
   return 0;
 }
