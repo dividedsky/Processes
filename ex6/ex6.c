@@ -14,6 +14,7 @@ and `clock_gettime()` should work just fine.
 #include <stdio.h>
 #include <unistd.h>
 #include <time.h>
+#include <stdint.h>
 
 #define number_iter 1000000
 #define BILLION 1000000000L
@@ -21,6 +22,22 @@ and `clock_gettime()` should work just fine.
 int main()
 {
     // Your code here
+  char buffer[8];
+  int p[2];
+  struct timespec start, end;
+
+  uint64_t total = 0;
+  for (int i = 0; i < 100; i++) {
+    clock_gettime(CLOCK_MONOTONIC, &start);
+    write(p[1], NULL, 8);
+    int end_time = clock_gettime(CLOCK_MONOTONIC, &end);
+    /* printf("null is %d\n", sizeof(NULL)); */
+    long diff = end.tv_nsec - start.tv_nsec;
+    printf("%d nanoseconds elapsed\n", diff);
+    total += diff;
+  }
+  printf("total is %d\n");
+  printf("average is %d\n", total / 100);
     
-    return 0;
+  return 0;
 }
