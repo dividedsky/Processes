@@ -7,16 +7,31 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <sys/wait.h>
+#include <string.h>
 
 #define MSGSIZE 16
 
-char* msg1 = "hello world #1";
-char* msg2 = "hello world #2";
-char* msg3 = "hello world #3";
+char* msg1 = "hello world #1\n";
+char* msg2 = "hello world #2\n";
+char* msg3 = "hello world #3\n";
 
 int main(void)
 {
-    // Your code here
-    
-    return 0;
+  // Your code here
+  int fd[2];
+
+  pipe(fd);
+  pid_t pid = fork();
+  char buffer[MSGSIZE * 3];
+
+  if (pid == 0) {
+    write(fd[1], msg1, MSGSIZE);
+    write(fd[1], msg2, MSGSIZE);
+    write(fd[1], msg3, MSGSIZE);
+  } else {
+    int bytes_read = read(fd[0], buffer, sizeof(buffer));
+    write(STDOUT_FILENO, buffer, bytes_read);
+  }
+
+  return 0;
 }
