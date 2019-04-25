@@ -10,17 +10,23 @@
 
 int main(void)
 {
-    // Your code here    
+  // Your code here
   int child = fork();
-  char *args[] = {"/bin/ls", "ls"};
   if (child == 0) {
+    char *args[] = {"/bin/ls", "ls"};
     execl(args[0], *args, NULL);
     printf("This line is nor run when calling exec\n");
   } else {
+    char *args[] = {"/bin/ls", "ls", "/home"};
+    char *pwd_args[] = {"/bin/pwd", "pwd"};
+    /* execl(args[0], *args, NULL); */
+    execl(args[0], *args, "../", NULL);
+    execl("ex4", *args); // infite loop, program keeps calling itself
+    /* execl(pwd_args[0], *pwd_args, NULL); */
+    /* execl("/bin/pwd", "pwd", NULL); */
     printf("parent function\n");
   }
   /* char *args[] = {"/bin/ls", NULL}; */
-  /* execvp(args[0], args); */
 
     return 0;
 }
